@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using DownKyi.Core.Logging;
 using DownKyi.Models;
 using Console = DownKyi.Core.Utils.Debugging.Console;

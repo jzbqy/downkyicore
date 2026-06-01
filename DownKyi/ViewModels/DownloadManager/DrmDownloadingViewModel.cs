@@ -5,6 +5,7 @@ using DownKyi.Core.Logging;
 using DownKyi.Models;
 using Prism.Commands;
 using Prism.Events;
+using Console = DownKyi.Core.Utils.Debugging.Console;
 
 namespace DownKyi.ViewModels.DownloadManager;
 

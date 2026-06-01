@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Text.RegularExpressions;
 using DownKyi.Core.Logging;
 using DownKyi.Models;
 using Console = DownKyi.Core.Utils.Debugging.Console;
@@ -222,12 +223,18 @@ public static class DrmTaskManager
         try
         {
             var keys = new List<(string, string)>();
-            var regex = new System.Text.RegularExpressions.Regex(@"["']kid["']\s*[:=]\s*["']([^"']+)["'].*?["']key["']\s*[:=]\s*["']([^"']+)["']", 
+            var regex = new System.Text.RegularExpressions.Regex(@"""kid""\s*:\s*""([^""]+)""",
                 System.Text.RegularExpressions.RegexOptions.Singleline);
 
-            foreach (Match match in regex.Matches(json))
+            var keyMatches = regex.Matches(json);
+            var keyRegex = new System.Text.RegularExpressions.Regex(@"""key""\s*:\s*""([^""]+)""",
+                System.Text.RegularExpressions.RegexOptions.Singleline);
+            var valueMatches = keyRegex.Matches(json);
+
+            var count = Math.Min(keyMatches.Count, valueMatches.Count);
+            for (int i = 0; i < count; i++)
             {
-                keys.Add((match.Groups[1].Value, match.Groups[2].Value));
+                keys.Add((keyMatches[i].Groups[1].Value, valueMatches[i].Groups[1].Value));
             }
 
             return keys;
