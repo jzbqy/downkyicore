@@ -1,5 +1,10 @@
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using DownKyi.Core.Logging;
 using Microsoft.Playwright;
 using Console = DownKyi.Core.Utils.Debugging.Console;
@@ -19,7 +24,7 @@ public class EdgeDrmBrowser : IDisposable
         {
             if (!IsEdgeInstalled())
             {
-                LogManager.Warning("EdgeDrmBrowser", "未检测到Microsoft Edge浏览器");
+                LogManager.Info("EdgeDrmBrowser", "未检测到Microsoft Edge浏览器");
                 return false;
             }
 
@@ -98,15 +103,15 @@ public class EdgeDrmBrowser : IDisposable
     {
         if (_page == null) return null;
 
-        var licenseEvent = new TaskCompletionSource<string>();
+        var licenseEvent = new TaskCompletionSource<string?>();
 
-        _page.Request += (sender, e) =>
+        _page.Request += (sender, request) =>
         {
             try
             {
-                if (e.Request.Url.Contains("license") || e.Request.Url.Contains("getlicense"))
+                if (request.Url.Contains("license") || request.Url.Contains("getlicense"))
                 {
-                    var postData = e.Request.PostData;
+                    var postData = request.PostData;
                     if (!string.IsNullOrEmpty(postData))
                     {
                         licenseEvent.TrySetResult(postData);
@@ -122,7 +127,6 @@ public class EdgeDrmBrowser : IDisposable
         var timeoutTask = Task.Delay(30000).ContinueWith(_ =>
         {
             licenseEvent.TrySetResult(null);
-            return null;
         });
 
         return await Task.WhenAny(licenseEvent.Task, timeoutTask);

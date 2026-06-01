@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using DownKyi.Core.Logging;
 using DownKyi.Models;
 using Console = DownKyi.Core.Utils.Debugging.Console;
@@ -206,7 +209,7 @@ public static class DrmTaskManager
             if (_continuousFailures >= _continuousFailureThreshold)
             {
                 _isRiskPaused = true;
-                LogManager.Warning("DrmTaskManager", $"连续失败{_continuousFailures}次，触发风控暂停");
+                LogManager.Info("DrmTaskManager", $"连续失败{_continuousFailures}次，触发风控暂停");
                 Console.PrintLine($"⚠️ 连续失败{_continuousFailures}次，触发风控暂停{_riskPauseMinutes}分钟");
             }
 
@@ -223,12 +226,10 @@ public static class DrmTaskManager
         try
         {
             var keys = new List<(string, string)>();
-            var regex = new System.Text.RegularExpressions.Regex(@"""kid""\s*:\s*""([^""]+)""",
-                System.Text.RegularExpressions.RegexOptions.Singleline);
+            var regex = new Regex(@"""kid""\s*:\s*""([^""]+)""", RegexOptions.Singleline);
 
             var keyMatches = regex.Matches(json);
-            var keyRegex = new System.Text.RegularExpressions.Regex(@"""key""\s*:\s*""([^""]+)""",
-                System.Text.RegularExpressions.RegexOptions.Singleline);
+            var keyRegex = new Regex(@"""key""\s*:\s*""([^""]+)""", RegexOptions.Singleline);
             var valueMatches = keyRegex.Matches(json);
 
             var count = Math.Min(keyMatches.Count, valueMatches.Count);

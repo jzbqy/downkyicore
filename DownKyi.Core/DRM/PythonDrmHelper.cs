@@ -1,4 +1,6 @@
+using System;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 using DownKyi.Core.Logging;
 using Console = DownKyi.Core.Utils.Debugging.Console;
@@ -30,13 +32,13 @@ public static class PythonDrmHelper
 
         if (!File.Exists(pythonEmbedPath))
         {
-            LogManager.Warning("PythonDrmHelper", "未找到嵌入式Python环境");
+            LogManager.Info("PythonDrmHelper", "未找到嵌入式Python环境");
             return false;
         }
 
         if (!File.Exists(scriptPath))
         {
-            LogManager.Warning("PythonDrmHelper", "未找到drm_parse.py脚本");
+            LogManager.Info("PythonDrmHelper", "未找到drm_parse.py脚本");
             return false;
         }
 

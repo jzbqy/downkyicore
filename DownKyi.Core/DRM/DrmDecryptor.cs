@@ -1,4 +1,8 @@
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using DownKyi.Core.Logging;
 using Console = DownKyi.Core.Utils.Debugging.Console;
 
@@ -26,7 +30,7 @@ public static class DrmDecryptor
         else
         {
             _isDecryptorAvailable = false;
-            LogManager.Warning("DrmDecryptor", "mp4decrypt未配置或不存在");
+            LogManager.Info("DrmDecryptor", "mp4decrypt未配置或不存在");
         }
     }
 

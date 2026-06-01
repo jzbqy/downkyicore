@@ -693,7 +693,7 @@ public class ViewDrmViewModel : ViewModelBase
             {
                 EdgeStatus = "❌ Edge浏览器：未检测到";
                 IsEdgeAvailable = false;
-                LogManager.Warning(Tag, "未检测到系统Microsoft Edge浏览器");
+                LogManager.Info(Tag, "未检测到系统Microsoft Edge浏览器");
             }
         }
         catch (Exception ex)
@@ -726,7 +726,7 @@ public class ViewDrmViewModel : ViewModelBase
             {
                 PythonStatus = "❌ Python环境：缺失";
                 IsPythonAvailable = false;
-                LogManager.Warning(Tag, "嵌入式Python环境缺失");
+                LogManager.Info(Tag, "嵌入式Python环境缺失");
             }
         }
         catch (Exception ex)
