@@ -6,20 +6,23 @@ on:
   pull_request:
     branches: [ main ]
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build:
     name: Build and Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v4.0.1
         with:
           dotnet-version: '6.0.x'
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore --verbosity quiet
       - name: Build
-        run: dotnet build --no-restore --configuration Release
+        run: dotnet build --no-restore --configuration Release --verbosity quiet
       - name: Test
-        run: dotnet test --no-build --configuration Release --verbosity normal
+        run: dotnet test --no-build --configuration Release --verbosity normal --no-restore
