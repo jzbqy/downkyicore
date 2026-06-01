@@ -20,7 +20,11 @@ jobs:
         uses: actions/setup-dotnet@v4.0.1
         with:
           dotnet-version: '6.0.x'
+      - name: Install system dependencies for Playwright
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libnss3 libnspr4 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 libpango-1.0-0 libcairo2 libasound2
       - name: Restore dependencies
         run: dotnet restore --verbosity quiet
       - name: Build
-        run: dotnet build --no-restore --configuration Release --verbosity quiet
+        run: dotnet build --no-restore --configuration Release --verbosity detailed 2>&1 | head -100
