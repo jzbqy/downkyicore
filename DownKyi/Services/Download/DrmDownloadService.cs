@@ -101,15 +101,15 @@ public class DrmDownloadService : DownloadService
         downloading.DownloadContent = string.Empty;
     }
 
-    public override void Start()
+    public void Start()
     {
-        base.BaseStart();
+        BaseStart();
         DrmTaskManager.Start();
     }
 
-    public override void End()
+    public void End()
     {
-        base.BaseEndTask().Wait();
+        BaseEndTask().Wait();
         DrmTaskManager.Stop();
     }
 
