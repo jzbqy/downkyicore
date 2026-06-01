@@ -90,7 +90,6 @@
                         VerticalAlignment="Center"
                         FontSize="12"
                         Text="{Binding WvdFilePath, Mode=TwoWay}"
-                        TextTrimming="CharacterEllipsis"
                         ToolTip.Tip="{Binding WvdFilePath}" />
                     <Button
                         Width="75"
@@ -127,7 +126,6 @@
                         VerticalAlignment="Center"
                         FontSize="12"
                         Text="{Binding Mp4DecryptPath, Mode=TwoWay}"
-                        TextTrimming="CharacterEllipsis"
                         ToolTip.Tip="{Binding Mp4DecryptPath}" />
                     <Button
                         Width="75"
