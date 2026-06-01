@@ -1,4 +1,4 @@
-﻿using DownKyi.Core.BiliApi.Models;
+using DownKyi.Core.BiliApi.Models;
 using Newtonsoft.Json;
 
 namespace DownKyi.Core.BiliApi.VideoStream.Models;
@@ -27,4 +27,6 @@ public class PlayUrlDashVideo : BaseModel
     // SegmentBase
     // segment_base
     [JsonProperty("codecid")] public int CodecId { get; set; }
+    
+    [JsonProperty("pssh")] public string? Pssh { get; set; }
 }

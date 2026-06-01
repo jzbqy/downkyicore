@@ -1,4 +1,4 @@
-﻿namespace DownKyi.Core.Settings.Models;
+namespace DownKyi.Core.Settings.Models;
 
 public class AppSettings
 {
@@ -9,4 +9,5 @@ public class AppSettings
     public AboutSettings About { get; set; } = new();
     public UserInfoSettings UserInfo { get; set; } = new();
     public WindowSettings WindowSettings { get; set; } = new();
+    public DrmSettings DrmSettings { get; set; } = new();
 }

@@ -1,4 +1,4 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 using DownKyi.Core.BiliApi.Models.Json;
 using DownKyi.Core.BiliApi.Sign;
 using DownKyi.Core.BiliApi.VideoStream.Models;
@@ -174,33 +174,162 @@ public static class VideoStream
         return playUrl;
     }
 
-    // /// <summary>
-    // /// 获取番剧的视频流
-    // /// </summary>
-    // /// <param name="avid"></param>
-    // /// <param name="bvid"></param>
-    // /// <param name="cid"></param>
-    // /// <param name="quality"></param>
-    // /// <returns></returns>
-    public static PlayUrl? GetBangumiPlayUrl(long avid, string bvid, long cid, int quality = 125)
+    /// <summary>
+/// 获取番剧的视频流
+/// </summary>
+/// <param name="avid"></param>
+/// <param name="bvid"></param>
+/// <param name="cid"></param>
+/// <param name="quality"></param>
+/// <returns></returns>
+public static PlayUrl? GetBangumiPlayUrl(long avid, string bvid, long cid, int quality = 125)
+{
+    return GetBangumiPlayUrlWithDrm(avid, bvid, cid, quality);
+}
+
+/// <summary>
+/// 获取番剧的视频流（支持DRM高码率）
+/// 使用新的 /ogv/player/playview 接口，POST请求
+/// </summary>
+/// <param name="avid"></param>
+/// <param name="bvid"></param>
+/// <param name="cid"></param>
+/// <param name="quality"></param>
+/// <returns></returns>
+public static PlayUrl? GetBangumiPlayUrlWithDrm(long avid, string bvid, long cid, int quality = 125)
+{
+    var parameters = new Dictionary<string, object?>
     {
-        var baseUrl = $"https://api.bilibili.com/pgc/player/web/playurl?cid={cid}&qn={quality}&fourk=1&fnver=0&fnval=4048";
-        string url;
-        if (bvid != null)
+        { "cid", cid },
+        { "qn", quality },
+        { "fourk", 1 },
+        { "fnver", 0 },
+        { "fnval", 4048 },
+        { "drm_tech_type", 2 },
+        { "ep_id", 0 }
+    };
+
+    if (!string.IsNullOrEmpty(bvid))
+    {
+        parameters.Add("bvid", bvid);
+    }
+    else if (avid > -1)
+    {
+        parameters.Add("aid", avid);
+    }
+    else
+    {
+        return null;
+    }
+
+    var wbiParams = WbiSign.EncodeWbi(parameters);
+    var query = WbiSign.ParametersToQuery(wbiParams);
+    var url = $"https://api.bilibili.com/ogv/player/playview?{query}";
+
+    return GetPlayUrlWithPost(url);
+}
+
+/// <summary>
+/// 使用POST方式获取视频流
+/// </summary>
+/// <param name="url"></param>
+/// <returns></returns>
+private static PlayUrl? GetPlayUrlWithPost(string url)
+{
+    var csrfToken = GetCsrfToken();
+    const string referer = "https://www.bilibili.com";
+    
+    var requestBody = new Dictionary<string, object?>
+    {
+        { "cid", ExtractParamFromUrl(url, "cid") },
+        { "qn", ExtractParamFromUrl(url, "qn") },
+        { "fourk", 1 },
+        { "fnver", 0 },
+        { "fnval", 4048 },
+        { "drm_tech_type", 2 },
+        { "ep_id", 0 }
+    };
+
+    var bvid = ExtractParamFromUrl(url, "bvid");
+    if (!string.IsNullOrEmpty(bvid))
+    {
+        requestBody.Add("bvid", bvid);
+    }
+    var aid = ExtractParamFromUrl(url, "aid");
+    if (!string.IsNullOrEmpty(aid))
+    {
+        requestBody.Add("aid", long.Parse(aid));
+    }
+
+    try
+    {
+        var response = WebClient.RequestWeb(url, referer, "POST", requestBody, json: true);
+        
+        var playUrl = JsonConvert.DeserializeObject<PlayUrlOrigin>(response);
+        if (playUrl == null)
         {
-            url = $"{baseUrl}&bvid={bvid}";
+            return null;
         }
-        else if (avid > -1)
+
+        if (playUrl.Data != null)
         {
-            url = $"{baseUrl}&aid={avid}";
+            return playUrl.Data;
+        }
+
+        if (playUrl.Result != null)
+        {
+            return playUrl.Result;
         }
         else
         {
             return null;
         }
-
-        return GetPlayUrl(url);
     }
+    catch (Exception e)
+    {
+        Console.PrintLine("GetPlayUrlWithPost()发生异常: {0}", e);
+        LogManager.Error("GetPlayUrlWithPost()", e);
+        return null;
+    }
+}
+
+/// <summary>
+/// 从URL中提取参数
+/// </summary>
+/// <param name="url"></param>
+/// <param name="paramName"></param>
+/// <returns></returns>
+private static string? ExtractParamFromUrl(string url, string paramName)
+{
+    try
+    {
+        var uri = new Uri(url);
+        var query = System.Web.HttpUtility.ParseQueryString(uri.Query);
+        return query[paramName];
+    }
+    catch
+    {
+        return null;
+    }
+}
+
+/// <summary>
+/// 获取CSRF Token（bili_jct）
+/// </summary>
+/// <returns></returns>
+private static string? GetCsrfToken()
+{
+    try
+    {
+        var cookies = LoginHelper.GetLoginInfoCookies();
+        var csrfCookie = cookies.FirstOrDefault(c => c.Name == "bili_jct");
+        return csrfCookie?.Value;
+    }
+    catch
+    {
+        return null;
+    }
+}
 
     /// <summary>
     /// 获取课程的视频流

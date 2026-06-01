@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
@@ -16,9 +16,14 @@
         <PackageReference Include="FFMpegCore"/>
         <PackageReference Include="Google.Protobuf"/>
         <PackageReference Include="Microsoft.Data.Sqlite.Core"/>
+        <PackageReference Include="Microsoft.Playwright" Version="1.40.0"/>
         <PackageReference Include="Newtonsoft.Json"/>
         <PackageReference Include="QRCoder"/>
         <PackageReference Include="SQLitePCLRaw.bundle_e_sqlcipher"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\DownKyi.Models\DownKyi.Models.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -28,5 +33,13 @@
         <None Update="Binary/$(RuntimeIdentifier)/ffmpeg/*" Link="ffmpeg/%(Filename)%(Extension)" Visible="false">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+    </ItemGroup>
+
+    <ItemGroup Condition="Exists('$(MSBuildProjectDirectory)/../_python_embed')">
+        <Content Include="..\_python_embed\**\*" Link="_python_embed\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest"/>
+    </ItemGroup>
+
+    <ItemGroup Condition="Exists('$(MSBuildProjectDirectory)/../Scripts')">
+        <Content Include="..\Scripts\**\*" Link="Scripts\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest"/>
     </ItemGroup>
 </Project>

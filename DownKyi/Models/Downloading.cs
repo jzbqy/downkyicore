@@ -40,5 +40,10 @@ public class Downloading
     //  下载速度
     public string? SpeedDisplay { get; set; }
 
+    // DRM相关属性
+    public bool IsDrmEncrypted { get; set; } = false;
+    
+    public DownloadQueueType QueueType { get; set; } = DownloadQueueType.Normal;
+
     public DownloadBase? DownloadBase { get; set; }
 }

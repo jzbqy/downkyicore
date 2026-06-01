@@ -1,0 +1,281 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="DownKyi.Views.Settings.ViewDrm"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:vms="clr-namespace:DownKyi.ViewModels.Settings"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             x:DataType="vms:ViewDrmViewModel">
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="50,0" Orientation="Vertical">
+            <StackPanel Margin="0,20,0,0" Orientation="Horizontal">
+                <TextBlock FontSize="18" Text="DRM设置" />
+            </StackPanel>
+
+            <CheckBox
+                Margin="0,20,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Command="{Binding DrmEnabledCommand}"
+                Content="启用DRM功能"
+                FontSize="12"
+                Foreground="{DynamicResource BrushTextDark}"
+                IsChecked="{Binding IsDrmEnabled, Mode=TwoWay}" />
+
+            <TextBlock
+                Height="1"
+                Margin="0,20,0,0"
+                Background="{DynamicResource BrushBorder}" />
+
+            <StackPanel Margin="0,20,0,0" Orientation="Vertical">
+                <TextBlock FontSize="14" Text="DRM运行环境状态" />
+                
+                <StackPanel Margin="10,10,0,0" Orientation="Horizontal">
+                    <TextBlock
+                        Width="150"
+                        VerticalAlignment="Center"
+                        FontSize="12"
+                        Foreground="{DynamicResource BrushTextDark}"
+                        Text="Edge浏览器" />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        FontSize="12"
+                        Foreground="{DynamicResource BrushTextGrey}"
+                        Text="{Binding EdgeStatus}" />
+                </StackPanel>
+
+                <StackPanel Margin="10,10,0,0" Orientation="Horizontal">
+                    <TextBlock
+                        Width="150"
+                        VerticalAlignment="Center"
+                        FontSize="12"
+                        Foreground="{DynamicResource BrushTextDark}"
+                        Text="Python环境" />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        FontSize="12"
+                        Foreground="{DynamicResource BrushTextGrey}"
+                        Text="{Binding PythonStatus}" />
+                </StackPanel>
+
+                <StackPanel Margin="10,10,0,0" Orientation="Horizontal">
+                    <TextBlock
+                        Width="150"
+                        VerticalAlignment="Center"
+                        FontSize="12"
+                        Foreground="{DynamicResource BrushTextDark}"
+                        Text="WVD文件" />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        FontSize="12"
+                        Foreground="{DynamicResource BrushTextGrey}"
+                        Text="{Binding WvdFileStatus}" />
+                </StackPanel>
+            </StackPanel>
+
+            <TextBlock
+                Height="1"
+                Margin="0,20,0,0"
+                Background="{DynamicResource BrushBorder}" />
+
+            <StackPanel Margin="0,20,0,0" Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        Width="150"
+                        VerticalAlignment="Center"
+                        FontSize="12"
+                        Foreground="{DynamicResource BrushTextDark}"
+                        Text="WVD文件路径" />
+                    <TextBox
+                        Width="400"
+                        VerticalAlignment="Center"
+                        FontSize="12"
+                        Text="{Binding WvdFilePath, Mode=TwoWay}"
+                        TextTrimming="CharacterEllipsis"
+                        ToolTip.Tip="{Binding WvdFilePath}" />
+                    <Button
+                        Width="75"
+                        Margin="10,0,0,0"
+                        Command="{Binding BrowseWvdFileCommand}"
+                        Content="浏览"
+                        FontSize="12" />
+                    <Button
+                        Width="75"
+                        Margin="10,0,0,0"
+                        Command="{Binding ValidateWvdFileCommand}"
+                        Content="验证"
+                        FontSize="12" />
+                </StackPanel>
+
+                <TextBlock
+                    Margin="160,10,0,0"
+                    FontSize="12"
+                    Foreground="{DynamicResource BrushTextGrey}"
+                    IsVisible="{Binding WvdStatusVisible}"
+                    Text="{Binding WvdStatusMessage}" />
+            </StackPanel>
+
+            <StackPanel Margin="0,20,0,0" Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        Width="150"
+                        VerticalAlignment="Center"
+                        FontSize="12"
+                        Foreground="{DynamicResource BrushTextDark}"
+                        Text="mp4decrypt路径" />
+                    <TextBox
+                        Width="400"
+                        VerticalAlignment="Center"
+                        FontSize="12"
+                        Text="{Binding Mp4DecryptPath, Mode=TwoWay}"
+                        TextTrimming="CharacterEllipsis"
+                        ToolTip.Tip="{Binding Mp4DecryptPath}" />
+                    <Button
+                        Width="75"
+                        Margin="10,0,0,0"
+                        Command="{Binding BrowseMp4DecryptCommand}"
+                        Content="浏览"
+                        FontSize="12" />
+                </StackPanel>
+
+                <TextBlock
+                    Margin="160,10,0,0"
+                    FontSize="12"
+                    Foreground="{DynamicResource BrushTextGrey}"
+                    IsVisible="{Binding DecryptorStatusVisible}"
+                    Text="{Binding DecryptorStatus}" />
+            </StackPanel>
+
+            <TextBlock
+                Height="1"
+                Margin="0,20,0,0"
+                Background="{DynamicResource BrushBorder}" />
+
+            <StackPanel Margin="0,20,0,0" Orientation="Vertical">
+                <TextBlock FontSize="14" Text="高级设置" />
+
+                <CheckBox
+                    Margin="10,10,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Command="{Binding AutoKeyAcquisitionCommand}"
+                    Content="自动密钥获取"
+                    FontSize="12"
+                    Foreground="{DynamicResource BrushTextDark}"
+                    IsChecked="{Binding AutoKeyAcquisition, Mode=TwoWay}" />
+
+                <CheckBox
+                    Margin="10,10,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Content="启动时自动检测环境"
+                    FontSize="12"
+                    Foreground="{DynamicResource BrushTextDark}"
+                    IsChecked="{Binding AutoCheckService, Mode=TwoWay}" />
+
+                <StackPanel Margin="10,10,0,0" Orientation="Horizontal">
+                    <TextBlock
+                        Width="150"
+                        VerticalAlignment="Center"
+                        FontSize="12"
+                        Foreground="{DynamicResource BrushTextDark}"
+                        Text="最大重试次数" />
+                    <TextBox
+                        Width="100"
+                        VerticalAlignment="Center"
+                        FontSize="12"
+                        Text="{Binding MaxRetryCount, Mode=TwoWay}" />
+                </StackPanel>
+
+                <StackPanel Margin="10,10,0,0" Orientation="Horizontal">
+                    <TextBlock
+                        Width="150"
+                        VerticalAlignment="Center"
+                        FontSize="12"
+                        Foreground="{DynamicResource BrushTextDark}"
+                        Text="连续失败阈值" />
+                    <TextBox
+                        Width="100"
+                        VerticalAlignment="Center"
+                        FontSize="12"
+                        Text="{Binding ContinuousFailureThreshold, Mode=TwoWay}" />
+                </StackPanel>
+
+                <StackPanel Margin="10,10,0,0" Orientation="Horizontal">
+                    <TextBlock
+                        Width="150"
+                        VerticalAlignment="Center"
+                        FontSize="12"
+                        Foreground="{DynamicResource BrushTextDark}"
+                        Text="风控暂停时间(分钟)" />
+                    <TextBox
+                        Width="100"
+                        VerticalAlignment="Center"
+                        FontSize="12"
+                        Text="{Binding RiskPauseMinutes, Mode=TwoWay}" />
+                </StackPanel>
+            </StackPanel>
+
+            <TextBlock
+                Height="1"
+                Margin="0,20,0,0"
+                Background="{DynamicResource BrushBorder}" />
+
+            <StackPanel Margin="0,20,0,0" Orientation="Vertical">
+                <TextBlock FontSize="14" Text="DRM队列管理" />
+
+                <StackPanel Margin="10,10,0,0" Orientation="Horizontal">
+                    <TextBlock
+                        Width="150"
+                        VerticalAlignment="Center"
+                        FontSize="12"
+                        Foreground="{DynamicResource BrushTextGrey}"
+                        Text="{Binding DrmQueueStatus}" />
+                </StackPanel>
+
+                <StackPanel Margin="10,10,0,0" Orientation="Horizontal">
+                    <Button
+                        Width="80"
+                        Command="{Binding StartDrmQueueCommand}"
+                        Content="启动队列"
+                        FontSize="12" />
+                    <Button
+                        Width="80"
+                        Margin="10,0,0,0"
+                        Command="{Binding StopDrmQueueCommand}"
+                        Content="停止队列"
+                        FontSize="12" />
+                    <Button
+                        Width="80"
+                        Margin="10,0,0,0"
+                        Command="{Binding ClearDrmQueueCommand}"
+                        Content="清空队列"
+                        FontSize="12" />
+                    <Button
+                        Width="80"
+                        Margin="10,0,0,0"
+                        Command="{Binding ForceResumeRiskCommand}"
+                        Content="解除风控"
+                        FontSize="12" />
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel Margin="0,20,0,0" Orientation="Horizontal">
+                <Button
+                    Width="100"
+                    Command="{Binding CheckServiceConnectionCommand}"
+                    Content="检测环境"
+                    FontSize="12" />
+            </StackPanel>
+
+            <TextBlock
+                Height="1"
+                Margin="0,20,0,0"
+                Background="{DynamicResource BrushBorder}" />
+
+            <StackPanel Margin="0,20,0,0" Orientation="Vertical">
+                <TextBlock FontSize="12" Foreground="{DynamicResource BrushTextGrey}" Text="{Binding EnvironmentStatus}" />
+                <TextBlock FontSize="12" Foreground="{DynamicResource BrushTextGrey}" Text="{Binding DecryptorAvailability}" />
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
