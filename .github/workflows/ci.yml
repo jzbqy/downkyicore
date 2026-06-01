@@ -20,7 +20,9 @@ jobs:
         uses: actions/setup-dotnet@v4.0.1
         with:
           dotnet-version: '6.0.x'
+      - name: List project files
+        run: ls -la
       - name: Restore dependencies
-        run: dotnet restore --verbosity quiet
+        run: dotnet restore
       - name: Build
-        run: dotnet build --no-restore --configuration Release --verbosity quiet
+        run: dotnet build --no-restore --configuration Release --verbosity normal
