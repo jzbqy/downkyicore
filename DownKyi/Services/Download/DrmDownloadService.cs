@@ -9,6 +9,7 @@ using DownKyi.Core.Logging;
 using DownKyi.Models;
 using DownKyi.PrismExtension.Dialog;
 using DownKyi.Utils;
+using DownKyi.ViewModels;
 using DownKyi.ViewModels.DownloadManager;
 using Console = DownKyi.Core.Utils.Debugging.Console;
 
