@@ -12,7 +12,7 @@ env:
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4.2.2
@@ -26,3 +26,25 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build --no-restore --configuration Release --verbosity normal
+      - name: Install Pupnet
+        run: |
+          dotnet tool install -g KuiperZone.PupNet --version 1.8.0
+      - name: Read Version Text
+        id: version
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: version.txt
+      - name: Get Deps
+        run: |
+          .\ffmpeg.ps1 x64
+          .\aria2.ps1 x64
+        working-directory: ./script
+      - name: Package
+        run: |
+          pupnet DownKyi.pupnet.conf --app-version ${{ steps.version.outputs.content }} --kind zip -r win-x64 -y
+        working-directory: ./script/pupnet
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: DownKyi-${{ steps.version.outputs.content }}-win-x64.zip
+          path: script/pupnet/output/DownKyi-${{ steps.version.outputs.content }}-1.win-x64.zip
