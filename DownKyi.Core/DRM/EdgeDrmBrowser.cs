@@ -129,7 +129,8 @@ public class EdgeDrmBrowser : IDisposable
             licenseEvent.TrySetResult(null);
         });
 
-        return await Task.WhenAny(licenseEvent.Task, timeoutTask);
+        await Task.WhenAny(licenseEvent.Task, timeoutTask);
+        return await licenseEvent.Task;
     }
 
     public static bool IsEdgeInstalled()
